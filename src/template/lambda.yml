@@ -1,0 +1,83 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Portfolio Insight Site - Lambda Resources'
+
+Parameters:
+  ProjectName:
+    Type: String
+    Description: Name for the project resources
+    
+  DeploymentBucket:
+    Type: String
+    Description: S3 bucket where Lambda code is uploaded
+    
+  LambdaCodeKey:
+    Type: String
+    Description: S3 key for the Lambda code zip file
+
+Resources:
+  # IAM Role for Lambda execution
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub '${ProjectName}-lambda-role'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: DynamoDBAccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - dynamodb:PutItem
+                  - dynamodb:GetItem
+                  - dynamodb:UpdateItem
+                  - dynamodb:DeleteItem
+                  - dynamodb:Scan
+                  - dynamodb:Query
+                Resource: 
+                  - Fn::ImportValue: !Sub '${AWS::StackName}-PortfolioTableArn'
+                  - Fn::ImportValue: !Sub '${AWS::StackName}-ProjectViewsTableArn'
+
+  # Lambda Function - Free tier provides 1M requests/month
+  PortfolioFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub '${ProjectName}-function'
+      Handler: lambda_function.lambda_handler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Runtime: python3.11
+      MemorySize: 128
+      Timeout: 10
+      Environment:
+        Variables:
+          PROJECT_VIEWS_TABLE_NAME: 
+            Fn::ImportValue: !Sub '${AWS::StackName}-ProjectViewsTableName'
+      Layers:
+        - 'arn:aws:lambda:us-west-2:770693421928:layer:Klayers-p311-boto3:25'
+      Code:
+        S3Bucket: !Ref DeploymentBucket
+        S3Key: !Ref LambdaCodeKey
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+
+Outputs:
+  LambdaFunctionName:
+    Description: Name of the Lambda function
+    Value: !Ref PortfolioFunction
+    Export:
+      Name: !Sub '${AWS::StackName}-LambdaFunctionName'
+
+  LambdaFunctionArn:
+    Description: ARN of the Lambda function
+    Value: !GetAtt PortfolioFunction.Arn
+    Export:
+      Name: !Sub '${AWS::StackName}-LambdaFunctionArn'
