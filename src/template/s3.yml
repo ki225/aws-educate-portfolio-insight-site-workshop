@@ -7,30 +7,25 @@ Parameters:
     Description: Name for the project resources
 
 Resources:
-  # S3 Bucket for static website hosting
+  # Use existing S3 Bucket instead of creating a new one
   WebsiteBucket:
     Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
     Properties:
-      BucketName: !Sub '${ProjectName}-website-ws-${AWS::AccountId}'
-      AccessControl: PublicRead
-      WebsiteConfiguration:
-        IndexDocument: index.html
-        ErrorDocument: error.html
-      Tags:
-        - Key: Project
-          Value: !Ref ProjectName
-
-  WebsiteBucketPolicy:
-    Type: AWS::S3::BucketPolicy
-    Properties:
-      Bucket: !Ref WebsiteBucket
-      PolicyDocument:
-        Statement:
-          - Action:
-              - 's3:GetObject'
-            Effect: Allow
-            Resource: !Sub 'arn:aws:s3:::${WebsiteBucket}/*'
-            Principal: '*'
+      BucketName: testforws0709
+ 
+  # WebsiteBucketPolicy 也可以保留，但需要確保不會與現有政策衝突
+  # WebsiteBucketPolicy:
+  #   Type: AWS::S3::BucketPolicy
+  #   Properties:
+  #     Bucket: !Ref WebsiteBucket
+  #     PolicyDocument:
+  #       Statement:
+  #         - Action:
+  #             - 's3:GetObject'
+  #           Effect: Allow
+  #           Resource: !Sub 'arn:aws:s3:::${WebsiteBucket}/*'
+  #           Principal: '*'
 
 Outputs:
   WebsiteURL:

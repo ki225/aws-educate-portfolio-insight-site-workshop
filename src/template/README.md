@@ -21,12 +21,15 @@
 ```bash
 cd src/lambda
 zip -r portfolio-insight-function.zip lambda_function.py
-aws s3 cp portfolio-insight-function.zip s3://your-deployment-bucket-name/lambda/
+aws s3 cp portfolio-insight-function.zip s3://<your-deployment-bucket-name>/lambda/
+```
+```
+aws s3 cp portfolio-insight-function.zip s3://testforws0709/lambda/
 ```
 
 2. **更新 parameters.json：**
 
-編輯 `template/parameters.json` 並填入您的 S3 儲存桶名稱：
+編輯 `template/parameters.json` 並填入自己的 S3 儲存桶名稱：
 
 ```json
 [
@@ -44,8 +47,45 @@ aws s3 cp portfolio-insight-function.zip s3://your-deployment-bucket-name/lambda
   }
 ]
 ```
+```
+aws s3 cp template/ s3://testforws0709/templates/ --recursive
+```
 
-3. **部署 CloudFormation 堆疊：**
+
+aws cloudformation package \
+  --template-file template/main.yml \
+  --s3-bucket testforws0709 \
+  --s3-prefix templates \
+  --output-template-file packaged-template.yml
+
+3. 打包
+```sh
+# 打包模板 - 這會上傳模板並更新引用
+aws cloudformation package \
+  --template-file template/main.yml \
+  --s3-bucket <your-deployment-bucket> \
+  --s3-prefix templates \
+  --output-template-file packaged-template.yml
+
+# 部署打包後的模板
+aws cloudformation deploy \
+  --template-file packaged-template.yml \
+  --stack-name portfolio-insight \
+  --parameter-overrides file://template/parameters.json \
+  --capabilities CAPABILITY_NAMED_IAM
+```
+```
+aws cloudformation deploy \
+  --template-file /home/cloudshell-user/aws-educate-portfolio-insight-site-workshop/src/packaged-template.yml \
+  --stack-name portfolio-insight1 \
+  --parameter-overrides \
+      ProjectName=portfolio-insight \
+      DeploymentBucket=testforws0709 \
+      LambdaCodeKey=lambda/portfolio-insight-function.zip \
+  --capabilities CAPABILITY_NAMED_IAM
+```
+
+4. **部署 CloudFormation 堆疊：**
 
 ```bash
 aws cloudformation deploy \
