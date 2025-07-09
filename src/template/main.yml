@@ -1,0 +1,76 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Portfolio Insight Site - Creates S3, Lambda, IAM, DynamoDB, and API Gateway resources using free tier'
+
+Parameters:
+  ProjectName:
+    Type: String
+    Default: portfolio-insight
+    Description: Name for the project resources
+    
+  DeploymentBucket:
+    Type: String
+    Description: S3 bucket where Lambda code is uploaded
+    
+  LambdaCodeKey:
+    Type: String
+    Description: S3 key for the Lambda code zip file
+
+Resources:
+  S3Stack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: ./s3.yml
+      Parameters:
+        ProjectName: !Ref ProjectName
+
+  DynamoDBStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: ./dynamodb.yml
+      Parameters:
+        ProjectName: !Ref ProjectName
+
+  LambdaStack:
+    Type: AWS::CloudFormation::Stack
+    DependsOn:
+      - DynamoDBStack
+    Properties:
+      TemplateURL: ./lambda.yml
+      Parameters:
+        ProjectName: !Ref ProjectName
+        DeploymentBucket: !Ref DeploymentBucket
+        LambdaCodeKey: !Ref LambdaCodeKey
+
+  ApiGatewayStack:
+    Type: AWS::CloudFormation::Stack
+    DependsOn:
+      - LambdaStack
+    Properties:
+      TemplateURL: ./apigateway.yml
+      Parameters:
+        ProjectName: !Ref ProjectName
+
+Outputs:
+  WebsiteURL:
+    Description: URL for the website hosted on S3
+    Value: !GetAtt S3Stack.Outputs.WebsiteURL
+
+  S3BucketName:
+    Description: Name of the S3 bucket
+    Value: !GetAtt S3Stack.Outputs.S3BucketName
+
+  PortfolioTableName:
+    Description: Name of the main DynamoDB table
+    Value: !GetAtt DynamoDBStack.Outputs.PortfolioTableName
+    
+  ProjectViewsTableName:
+    Description: Name of the Project Views DynamoDB table
+    Value: !GetAtt DynamoDBStack.Outputs.ProjectViewsTableName
+
+  LambdaFunctionName:
+    Description: Name of the Lambda function
+    Value: !GetAtt LambdaStack.Outputs.LambdaFunctionName
+
+  ApiEndpoint:
+    Description: URL for the API Gateway endpoint
+    Value: !GetAtt ApiGatewayStack.Outputs.ApiEndpoint

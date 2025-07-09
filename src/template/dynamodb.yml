@@ -1,0 +1,65 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Portfolio Insight Site - DynamoDB Resources'
+
+Parameters:
+  ProjectName:
+    Type: String
+    Description: Name for the project resources
+
+Resources:
+  # DynamoDB Table - Free tier eligible with on-demand capacity
+  PortfolioTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub '${ProjectName}-data'
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+          
+  # ProjectViews DynamoDB Table - To track project view counts
+  ProjectViewsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub '${ProjectName}-project-views'
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: project_id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: project_id
+          KeyType: HASH
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+
+Outputs:
+  PortfolioTableName:
+    Description: Name of the DynamoDB table
+    Value: !Ref PortfolioTable
+    Export:
+      Name: !Sub '${AWS::StackName}-PortfolioTableName'
+
+  PortfolioTableArn:
+    Description: ARN of the DynamoDB table
+    Value: !GetAtt PortfolioTable.Arn
+    Export:
+      Name: !Sub '${AWS::StackName}-PortfolioTableArn'
+    
+  ProjectViewsTableName:
+    Description: Name of the Project Views DynamoDB table
+    Value: !Ref ProjectViewsTable
+    Export:
+      Name: !Sub '${AWS::StackName}-ProjectViewsTableName'
+
+  ProjectViewsTableArn:
+    Description: ARN of the Project Views DynamoDB table
+    Value: !GetAtt ProjectViewsTable.Arn
+    Export:
+      Name: !Sub '${AWS::StackName}-ProjectViewsTableArn'

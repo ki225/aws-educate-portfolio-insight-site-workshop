@@ -1,0 +1,178 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Portfolio Insight Site - API Gateway Resources'
+
+Parameters:
+  ProjectName:
+    Type: String
+    Description: Name for the project resources
+
+Resources:
+  # API Gateway - Free tier provides 1M API calls/month
+  PortfolioAPI:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Name: !Sub '${ProjectName}-api'
+      Description: API Gateway for Portfolio Insight Site
+      EndpointConfiguration:
+        Types:
+          - REGIONAL
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+
+  # Projects resource
+  ProjectsResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref PortfolioAPI
+      ParentId: !GetAtt PortfolioAPI.RootResourceId
+      PathPart: 'projects'
+
+  # Project Views resource for GET all views
+  ProjectsViewsResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref PortfolioAPI
+      ParentId: !Ref ProjectsResource
+      PathPart: 'views'
+  
+  # Project View resource for POST increment view
+  ProjectViewResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref PortfolioAPI
+      ParentId: !Ref ProjectsResource
+      PathPart: 'view'
+
+  # GET method for retrieving all project views
+  GetProjectViewsMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref PortfolioAPI
+      ResourceId: !Ref ProjectsViewsResource
+      HttpMethod: GET
+      AuthorizationType: NONE
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaFunctionArn}/invocations'
+      MethodResponses:
+        - StatusCode: '200'
+          ResponseModels:
+            application/json: 'Empty'
+          ResponseParameters:
+            method.response.header.Access-Control-Allow-Origin: true
+
+  # POST method for incrementing a project view
+  PostProjectViewMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref PortfolioAPI
+      ResourceId: !Ref ProjectViewResource
+      HttpMethod: POST
+      AuthorizationType: NONE
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaFunctionArn}/invocations'
+      MethodResponses:
+        - StatusCode: '200'
+          ResponseModels:
+            application/json: 'Empty'
+          ResponseParameters:
+            method.response.header.Access-Control-Allow-Origin: true
+
+  # OPTIONS method for CORS support (GET all views)
+  OptionsViewsMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref PortfolioAPI
+      ResourceId: !Ref ProjectsViewsResource
+      HttpMethod: OPTIONS
+      AuthorizationType: NONE
+      Integration:
+        Type: MOCK
+        IntegrationResponses:
+          - StatusCode: '200'
+            ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            ResponseTemplates:
+              application/json: '{}'
+        PassthroughBehavior: WHEN_NO_MATCH
+        RequestTemplates:
+          application/json: '{"statusCode": 200}'
+      MethodResponses:
+        - StatusCode: '200'
+          ResponseModels:
+            application/json: 'Empty'
+          ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Methods: true
+            method.response.header.Access-Control-Allow-Origin: true
+
+  # OPTIONS method for CORS support (POST increment view)
+  OptionsViewMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref PortfolioAPI
+      ResourceId: !Ref ProjectViewResource
+      HttpMethod: OPTIONS
+      AuthorizationType: NONE
+      Integration:
+        Type: MOCK
+        IntegrationResponses:
+          - StatusCode: '200'
+            ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Methods: "'POST,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            ResponseTemplates:
+              application/json: '{}'
+        PassthroughBehavior: WHEN_NO_MATCH
+        RequestTemplates:
+          application/json: '{"statusCode": 200}'
+      MethodResponses:
+        - StatusCode: '200'
+          ResponseModels:
+            application/json: 'Empty'
+          ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Methods: true
+            method.response.header.Access-Control-Allow-Origin: true
+
+  APIDeployment:
+    Type: AWS::ApiGateway::Deployment
+    DependsOn:
+      - GetProjectViewsMethod
+      - PostProjectViewMethod
+      - OptionsViewsMethod
+      - OptionsViewMethod
+    Properties:
+      RestApiId: !Ref PortfolioAPI
+      StageName: 'v1'
+
+  LambdaPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: 
+        Fn::ImportValue: !Sub '${AWS::StackName}-LambdaFunctionName'
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub 'arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${PortfolioAPI}/*/*'
+
+Outputs:
+  ApiEndpoint:
+    Description: URL for the API Gateway endpoint
+    Value: !Sub 'https://${PortfolioAPI}.execute-api.${AWS::Region}.amazonaws.com/v1/'
+  
+  GetProjectViewsEndpoint:
+    Description: URL for getting all project views
+    Value: !Sub 'https://${PortfolioAPI}.execute-api.${AWS::Region}.amazonaws.com/v1/projects/views'
+    
+  PostProjectViewEndpoint:
+    Description: URL for incrementing a project view
+    Value: !Sub 'https://${PortfolioAPI}.execute-api.${AWS::Region}.amazonaws.com/v1/projects/view'
+    Export:
+      Name: !Sub '${AWS::StackName}-ApiEndpoint'

@@ -1,0 +1,14 @@
+[
+  {
+    "ParameterKey": "ProjectName",
+    "ParameterValue": "portfolio-insight"
+  },
+  {
+    "ParameterKey": "DeploymentBucket",
+    "ParameterValue": "your-deployment-bucket-name"
+  },
+  {
+    "ParameterKey": "LambdaCodeKey",
+    "ParameterValue": "lambda/portfolio-insight-function.zip"
+  }
+]
