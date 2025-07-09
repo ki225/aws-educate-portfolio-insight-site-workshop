@@ -16,17 +16,10 @@ Parameters:
     Description: S3 key for the Lambda code zip file
 
 Resources:
-  S3Stack:
-    Type: AWS::CloudFormation::Stack
-    Properties:
-      TemplateURL: ./s3.yml
-      Parameters:
-        ProjectName: !Ref ProjectName
-
   DynamoDBStack:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: ./dynamodb.yml
+      TemplateURL: !Sub 'https://${DeploymentBucket}.s3.amazonaws.com/templates/dynamodb.yml'
       Parameters:
         ProjectName: !Ref ProjectName
 
@@ -35,7 +28,7 @@ Resources:
     DependsOn:
       - DynamoDBStack
     Properties:
-      TemplateURL: ./lambda.yml
+      TemplateURL: !Sub 'https://${DeploymentBucket}.s3.amazonaws.com/templates/lambda.yml'
       Parameters:
         ProjectName: !Ref ProjectName
         DeploymentBucket: !Ref DeploymentBucket
@@ -46,18 +39,13 @@ Resources:
     DependsOn:
       - LambdaStack
     Properties:
-      TemplateURL: ./apigateway.yml
+      TemplateURL: !Sub 'https://${DeploymentBucket}.s3.amazonaws.com/templates/apigateway.yml'
       Parameters:
         ProjectName: !Ref ProjectName
 
 Outputs:
-  WebsiteURL:
-    Description: URL for the website hosted on S3
-    Value: !GetAtt S3Stack.Outputs.WebsiteURL
-
-  S3BucketName:
-    Description: Name of the S3 bucket
-    Value: !GetAtt S3Stack.Outputs.S3BucketName
+  # S3 相關輸出已被移除，因為使用手動創建的儲存桶
+  # 如果需要 S3 儲存桶信息，請直接使用 AWS 控制台或 CLI 獲取
 
   PortfolioTableName:
     Description: Name of the main DynamoDB table
