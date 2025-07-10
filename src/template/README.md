@@ -12,7 +12,7 @@
 ### 前置條件
 
 1. 已安裝並設定 AWS CLI
-<!-- 2. 用於 Lambda 程式碼部署的 S3 -->
+2. 手動建立用於 Lambda 程式碼部署的 S3，名字要獨一無二
 
 ### 步驟
 
@@ -21,15 +21,12 @@
 ```bash
 cd src/lambda
 zip -r portfolio-insight-function.zip lambda_function.py
-aws s3 cp portfolio-insight-function.zip s3://<your-deployment-bucket-name>/lambda/
-```
-```
-aws s3 cp portfolio-insight-function.zip s3://testforws0709/lambda/
+# 記得替換 <your-deployment-bucket-name>
+aws s3 cp portfolio-insight-function.zip s3://<your-deployment-bucket-name>/lambda/ 
 ```
 
 2. **更新 parameters.json：**
-
-編輯 `template/parameters.json` 並填入自己的 S3 儲存桶名稱：
+編輯 `template/parameters.json` 並填入自己的 S3 儲存桶名稱。之後的變數會從這邊拿：
 
 ```json
 [
@@ -39,7 +36,7 @@ aws s3 cp portfolio-insight-function.zip s3://testforws0709/lambda/
   },
   {
     "ParameterKey": "DeploymentBucket",
-    "ParameterValue": "your-deployment-bucket-name"
+    "ParameterValue": "<your-deployment-bucket-name>" // 修改這邊
   },
   {
     "ParameterKey": "LambdaCodeKey",
@@ -47,18 +44,15 @@ aws s3 cp portfolio-insight-function.zip s3://testforws0709/lambda/
   }
 ]
 ```
+
+3. **把模板複製到 s3：**
+確保進入到專案內的 `src/` 路徑
+```bash
+aws s3 cp template/ s3://<your-deployment-bucket-name>/templates/ --recursive
 ```
-aws s3 cp template/ s3://testforws0709/templates/ --recursive
-```
 
-
-aws cloudformation package \
-  --template-file template/main.yml \
-  --s3-bucket testforws0709 \
-  --s3-prefix templates \
-  --output-template-file packaged-template.yml
-
-3. 打包
+4. 打包
+確保進入到專案內的 `src/` 路徑
 ```sh
 # 打包模板 - 這會上傳模板並更新引用
 aws cloudformation package \
@@ -66,26 +60,10 @@ aws cloudformation package \
   --s3-bucket <your-deployment-bucket> \
   --s3-prefix templates \
   --output-template-file packaged-template.yml
-
-# 部署打包後的模板
-aws cloudformation deploy \
-  --template-file packaged-template.yml \
-  --stack-name portfolio-insight \
-  --parameter-overrides file://template/parameters.json \
-  --capabilities CAPABILITY_NAMED_IAM
-```
-```
-aws cloudformation deploy \
-  --template-file /home/cloudshell-user/aws-educate-portfolio-insight-site-workshop/src/packaged-template.yml \
-  --stack-name portfolio-insight1 \
-  --parameter-overrides \
-      ProjectName=portfolio-insight \
-      DeploymentBucket=testforws0709 \
-      LambdaCodeKey=lambda/portfolio-insight-function.zip \
-  --capabilities CAPABILITY_NAMED_IAM
 ```
 
-4. **部署 CloudFormation 堆疊：**
+
+5. **部署 CloudFormation stack：**
 
 ```bash
 aws cloudformation deploy \
@@ -101,3 +79,11 @@ aws cloudformation deploy \
 - 此堆疊使用 `arn:aws:lambda:us-west-2:770693421928:layer:Klayers-p311-boto3:25` Lambda Layer 提供 boto3 相依性
 - 此 Lambda Layer 僅適用於 `us-west-2` 區域和 Python 3.11
 - 必須部署到 `us-west-2` 區域才能使 Lambda Layer 正常運作
+
+## 刪除堆疊
+
+如果需要刪除整個堆疊及其資源，請使用以下指令：
+
+```bash
+aws cloudformation delete-stack --stack-name portfolio-insight --region us-west-2
+```
