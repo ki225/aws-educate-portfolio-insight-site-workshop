@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: 'Portfolio Insight Site - Creates S3, Lambda, IAM, DynamoDB, and API Gateway resources using free tier'
+Description: 'Portfolio Insight Site - Creates Lambda, IAM, DynamoDB, and API Gateway resources using free tier'
 
 Parameters:
   ProjectName:
@@ -42,11 +42,9 @@ Resources:
       TemplateURL: !Sub 'https://${DeploymentBucket}.s3.amazonaws.com/templates/apigateway.yml'
       Parameters:
         ProjectName: !Ref ProjectName
+        LambdaFunctionArn: !GetAtt LambdaStack.Outputs.LambdaFunctionArn
 
 Outputs:
-  # S3 相關輸出已被移除，因為使用手動創建的儲存桶
-  # 如果需要 S3 儲存桶信息，請直接使用 AWS 控制台或 CLI 獲取
-
   PortfolioTableName:
     Description: Name of the main DynamoDB table
     Value: !GetAtt DynamoDBStack.Outputs.PortfolioTableName

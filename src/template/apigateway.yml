@@ -5,6 +5,10 @@ Parameters:
   ProjectName:
     Type: String
     Description: Name for the project resources
+    
+  LambdaFunctionArn:
+    Type: String
+    Description: ARN of the Lambda function
 
 Resources:
   # API Gateway - Free tier provides 1M API calls/month
@@ -157,8 +161,7 @@ Resources:
     Type: AWS::Lambda::Permission
     Properties:
       Action: lambda:InvokeFunction
-      FunctionName: 
-        Fn::ImportValue: !Sub '${AWS::StackName}-LambdaFunctionName'
+      FunctionName: !Ref LambdaFunctionArn
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub 'arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${PortfolioAPI}/*/*'
 

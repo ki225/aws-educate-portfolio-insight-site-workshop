@@ -43,8 +43,8 @@ Resources:
                   - dynamodb:Scan
                   - dynamodb:Query
                 Resource: 
-                  - Fn::ImportValue: !Sub '${AWS::StackName}-PortfolioTableArn'
-                  - Fn::ImportValue: !Sub '${AWS::StackName}-ProjectViewsTableArn'
+                  - Fn::ImportValue: !Sub '${ProjectName}-DynamoDBStack-PortfolioTableArn'
+                  - Fn::ImportValue: !Sub '${ProjectName}-DynamoDBStack-ProjectViewsTableArn'
 
   # Lambda Function - Free tier provides 1M requests/month
   PortfolioFunction:
@@ -59,7 +59,7 @@ Resources:
       Environment:
         Variables:
           PROJECT_VIEWS_TABLE_NAME: 
-            Fn::ImportValue: !Sub '${AWS::StackName}-ProjectViewsTableName'
+            Fn::ImportValue: !Sub '${ProjectName}-DynamoDBStack-ProjectViewsTableName'
       Layers:
         - 'arn:aws:lambda:us-west-2:770693421928:layer:Klayers-p311-boto3:25'
       Code:
