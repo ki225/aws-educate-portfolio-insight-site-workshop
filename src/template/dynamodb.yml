@@ -44,22 +44,22 @@ Outputs:
     Description: Name of the DynamoDB table
     Value: !Ref PortfolioTable
     Export:
-      Name: !Sub '${AWS::StackName}-PortfolioTableName'
+      Name: !Sub '${ProjectName}-DynamoDBStack-PortfolioTableName'
 
   PortfolioTableArn:
     Description: ARN of the DynamoDB table
     Value: !GetAtt PortfolioTable.Arn
     Export:
-      Name: !Sub '${AWS::StackName}-PortfolioTableArn'
+      Name: !Sub '${ProjectName}-DynamoDBStack-PortfolioTableArn'
     
   ProjectViewsTableName:
     Description: Name of the Project Views DynamoDB table
     Value: !Ref ProjectViewsTable
     Export:
-      Name: !Sub '${AWS::StackName}-ProjectViewsTableName'
+      Name: !Sub '${ProjectName}-DynamoDBStack-ProjectViewsTableName'
 
   ProjectViewsTableArn:
     Description: ARN of the Project Views DynamoDB table
     Value: !GetAtt ProjectViewsTable.Arn
     Export:
-      Name: !Sub '${AWS::StackName}-ProjectViewsTableArn'
+      Name: !Sub '${ProjectName}-DynamoDBStack-ProjectViewsTableArn'
