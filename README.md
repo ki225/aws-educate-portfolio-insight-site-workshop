@@ -6,7 +6,7 @@
 - AWS Lambda 用於後端處理
 - Amazon API Gateway 用於 API 端點
 
-<img width="2196" height="964" alt="image" src="https://github.com/user-attachments/assets/856556ac-1176-482e-9ce8-df17b9b14163" />
+<img width="1958" height="1199" alt="image" src="https://github.com/user-attachments/assets/284706fe-b50c-45cb-9fd5-e78c336a71d4" />
 
 
 ## 部署步驟
