@@ -1,0 +1,291 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Portfolio Insight Site - Combined template that creates Lambda, IAM, DynamoDB, API Gateway, and S3 resources using free tier'
+
+Parameters:
+  ProjectName:
+    Type: String
+    Default: portfolio-insight
+    Description: Name for the project resources
+    
+  DeploymentBucket:
+    Type: String
+    Description: S3 bucket where Lambda code is uploaded
+    
+  LambdaCodeKey:
+    Type: String
+    Description: S3 key for the Lambda code zip file
+
+Resources:
+  # ============== DynamoDB Resources ==============
+  PortfolioTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub '${ProjectName}-data'
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+          
+  ProjectViewsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub '${ProjectName}-project-views'
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: project_id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: project_id
+          KeyType: HASH
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+
+  # ============== Lambda Resources ==============
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub '${ProjectName}-lambda-role'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: DynamoDBAccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - dynamodb:PutItem
+                  - dynamodb:GetItem
+                  - dynamodb:UpdateItem
+                  - dynamodb:DeleteItem
+                  - dynamodb:Scan
+                  - dynamodb:Query
+                Resource: 
+                  - !GetAtt PortfolioTable.Arn
+                  - !GetAtt ProjectViewsTable.Arn
+
+  PortfolioFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub '${ProjectName}-function'
+      Handler: lambda_function.lambda_handler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Runtime: python3.11
+      MemorySize: 128
+      Timeout: 10
+      Environment:
+        Variables:
+          PROJECT_VIEWS_TABLE_NAME: !Ref ProjectViewsTable
+      Layers:
+        - 'arn:aws:lambda:us-west-2:770693421928:layer:Klayers-p311-boto3:25'
+      Code:
+        S3Bucket: !Ref DeploymentBucket
+        S3Key: !Ref LambdaCodeKey
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+
+  # ============== API Gateway Resources ==============
+  PortfolioAPI:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Name: !Sub '${ProjectName}-api'
+      Description: API Gateway for Portfolio Insight Site
+      EndpointConfiguration:
+        Types:
+          - REGIONAL
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+
+  ProjectsResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref PortfolioAPI
+      ParentId: !GetAtt PortfolioAPI.RootResourceId
+      PathPart: 'projects'
+
+  ProjectsViewsResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref PortfolioAPI
+      ParentId: !Ref ProjectsResource
+      PathPart: 'views'
+  
+  ProjectViewResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref PortfolioAPI
+      ParentId: !Ref ProjectsResource
+      PathPart: 'view'
+
+  GetProjectViewsMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref PortfolioAPI
+      ResourceId: !Ref ProjectsViewsResource
+      HttpMethod: GET
+      AuthorizationType: NONE
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${PortfolioFunction.Arn}/invocations'
+      MethodResponses:
+        - StatusCode: '200'
+          ResponseModels:
+            application/json: 'Empty'
+          ResponseParameters:
+            method.response.header.Access-Control-Allow-Origin: true
+
+  PostProjectViewMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref PortfolioAPI
+      ResourceId: !Ref ProjectViewResource
+      HttpMethod: POST
+      AuthorizationType: NONE
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${PortfolioFunction.Arn}/invocations'
+      MethodResponses:
+        - StatusCode: '200'
+          ResponseModels:
+            application/json: 'Empty'
+          ResponseParameters:
+            method.response.header.Access-Control-Allow-Origin: true
+
+  OptionsViewsMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref PortfolioAPI
+      ResourceId: !Ref ProjectsViewsResource
+      HttpMethod: OPTIONS
+      AuthorizationType: NONE
+      Integration:
+        Type: MOCK
+        IntegrationResponses:
+          - StatusCode: '200'
+            ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            ResponseTemplates:
+              application/json: '{}'
+        PassthroughBehavior: WHEN_NO_MATCH
+        RequestTemplates:
+          application/json: '{"statusCode": 200}'
+      MethodResponses:
+        - StatusCode: '200'
+          ResponseModels:
+            application/json: 'Empty'
+          ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Methods: true
+            method.response.header.Access-Control-Allow-Origin: true
+
+  OptionsViewMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref PortfolioAPI
+      ResourceId: !Ref ProjectViewResource
+      HttpMethod: OPTIONS
+      AuthorizationType: NONE
+      Integration:
+        Type: MOCK
+        IntegrationResponses:
+          - StatusCode: '200'
+            ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Methods: "'POST,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            ResponseTemplates:
+              application/json: '{}'
+        PassthroughBehavior: WHEN_NO_MATCH
+        RequestTemplates:
+          application/json: '{"statusCode": 200}'
+      MethodResponses:
+        - StatusCode: '200'
+          ResponseModels:
+            application/json: 'Empty'
+          ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Methods: true
+            method.response.header.Access-Control-Allow-Origin: true
+
+  APIDeployment:
+    Type: AWS::ApiGateway::Deployment
+    DependsOn:
+      - GetProjectViewsMethod
+      - PostProjectViewMethod
+      - OptionsViewsMethod
+      - OptionsViewMethod
+    Properties:
+      RestApiId: !Ref PortfolioAPI
+      StageName: 'v1'
+
+  LambdaPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref PortfolioFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub 'arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${PortfolioAPI}/*/*'
+
+  # ============== S3 Resources ==============
+  WebsiteBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    Properties:
+      BucketName: testforws0709
+
+Outputs:
+  PortfolioTableName:
+    Description: Name of the main DynamoDB table
+    Value: !Ref PortfolioTable
+    
+  ProjectViewsTableName:
+    Description: Name of the Project Views DynamoDB table
+    Value: !Ref ProjectViewsTable
+
+  LambdaFunctionName:
+    Description: Name of the Lambda function
+    Value: !Ref PortfolioFunction
+    
+  LambdaFunctionArn:
+    Description: ARN of the Lambda function
+    Value: !GetAtt PortfolioFunction.Arn
+
+  ApiEndpoint:
+    Description: URL for the API Gateway endpoint
+    Value: !Sub 'https://${PortfolioAPI}.execute-api.${AWS::Region}.amazonaws.com/v1/'
+  
+  GetProjectViewsEndpoint:
+    Description: URL for getting all project views
+    Value: !Sub 'https://${PortfolioAPI}.execute-api.${AWS::Region}.amazonaws.com/v1/projects/views'
+    
+  PostProjectViewEndpoint:
+    Description: URL for incrementing a project view
+    Value: !Sub 'https://${PortfolioAPI}.execute-api.${AWS::Region}.amazonaws.com/v1/projects/view'
+    
+  WebsiteURL:
+    Description: URL for the website hosted on S3
+    Value: !GetAtt WebsiteBucket.WebsiteURL
+
+  S3BucketName:
+    Description: Name of the S3 bucket
+    Value: !Ref WebsiteBucket
