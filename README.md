@@ -6,5 +6,8 @@
 - AWS Lambda 用於後端處理
 - Amazon API Gateway 用於 API 端點
 
+<img width="2196" height="964" alt="image" src="https://github.com/user-attachments/assets/856556ac-1176-482e-9ce8-df17b9b14163" />
+
+
 ## 部署步驟
 本工作坊使用 aws iac 工具 CloudFormation 進行 lambda, dynamoDB, apigateway 等部署。詳細步驟請參考 `src/template/README.md`。
