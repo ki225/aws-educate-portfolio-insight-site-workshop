@@ -72,7 +72,7 @@ def get_all_project_views(headers):
         return {
             'statusCode': 200,
             'headers': headers,
-            'body': json.dumps(result)
+            'body': json.dumps(result, default=str)
         }
     
     except ClientError as e:
@@ -121,7 +121,7 @@ def increment_project_view(event, headers):
             'body': json.dumps({
                 'message': 'View count incremented',
                 'project': updated_item
-            })
+            }, default=str)
         }
         
     except ClientError as e:
