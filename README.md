@@ -10,4 +10,4 @@
 
 
 ## 部署步驟
-本工作坊使用 aws iac 工具 CloudFormation 進行 lambda, dynamoDB, apigateway 等部署。詳細步驟請參考 `src/template/README.md`。
+本工作坊使用 aws iac 工具 CloudFormation 進行 lambda, dynamoDB, apigateway 等部署。詳細步驟請參考工作坊 notion。
