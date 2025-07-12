@@ -1,0 +1,222 @@
+/* 1. Reset & Base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: "Anonymous Pro", monospace;
+  background-color: #f5efe7;
+  color: #213555;
+  /* margin-right: 4%;
+  margin-left: 4%; */
+}
+
+/* 2. Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem 4rem;
+}
+.header-left {
+  font-size: 1.25rem;
+  font-weight: bold;
+  text-decoration: none;
+  color: inherit;
+}
+.header-right a {
+  margin-left: 2rem;
+  font-size: 1rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* 3. Hero 區塊 */
+#heroSection {
+  height: calc(100vh - 5rem);
+}
+
+.hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 4rem;
+  /* margin-top: ; */
+  margin-left: 6%;
+  margin-right: 6%;
+}
+/* 左側文字 */
+.hero-text {
+  max-width: 50%;
+}
+.hero-text .greeting {
+  font-weight: bold;
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+.hero-text .title {
+  color: #3e5879;
+  font-weight: bold;
+  font-size: 3.5rem;
+  line-height: 1.1;
+  letter-spacing: 0.5rem;
+  margin-bottom: 1rem;
+}
+.hero-text .subtitle {
+  font-weight: bold;
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
+}
+.resume-btn {
+  font-size: 1.25rem;
+  padding: 0.75rem 1.5rem;
+  background-color: #a6c3e8;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* 4. Hero 大頭照 */
+.hero-image img {
+  width: 320px;
+  height: 320px;
+  object-fit: cover;
+  border: 8px solid #3e5879;
+  border-radius: 50%;
+}
+
+/* 5. 響應式調整（選用） */
+@media (max-width: 768px) {
+  .header {
+    padding: 1rem 2rem;
+  }
+  .hero {
+    flex-direction: column;
+    text-align: center;
+    margin-top: 2rem;
+    padding: 0 2rem;
+  }
+  .hero-text {
+    max-width: 100%;
+  }
+  .hero-image {
+    margin-top: 2rem;
+  }
+}
+
+/* Project Section Start Here */
+
+.project-section {
+  background-color: #2d3e60;
+  padding: 4rem 2rem;
+  text-align: center;
+  height: 100vh;
+}
+.project-title {
+  font-family: "Anonymous Pro", monospace;
+  font-size: 4rem;
+  color: #e6d8c3;
+  margin-bottom: 3rem;
+}
+
+/* grid */
+.project-grid {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+/* Project Section End Here */
+
+/* Card Component Start Here*/
+.card {
+  background: #ece9f2;
+  border-radius: 1rem;
+  width: 300px;
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* header */
+
+.card-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* image placeholder */
+.card-image {
+  background: #d8d4da;
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.card-image-placeholder {
+  width: 60px;
+  height: 60px;
+  background: #c2bec4;
+  border-radius: 0.5rem;
+}
+/* card body */
+.card-body .card-description {
+  margin-bottom: 4rem; /* 或者你想要的距離 */
+}
+
+.card-views {
+  position: absolute;
+  left: 1rem;
+  bottom: 1rem;
+  font-size: 0.875rem;
+  color: #555;
+  /* background: rgba(255, 255, 255, 0.8); */
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+}
+
+/* body */
+.card-body {
+  padding: 1rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+.card-body-title {
+  font-weight: bold;
+}
+.card-body-sub {
+  font-size: 0.875rem;
+  color: #555;
+  margin-bottom: 0.75rem;
+}
+.card-description {
+  flex-grow: 1;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+/* labels */
+.card-labels {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+.card-label {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  border-radius: 2rem;
+  border: 1px solid #6f52b8;
+  background: transparent;
+  cursor: pointer;
+}
+.card-label.filled {
+  background: #6f52b8;
+  color: white;
+}
+/* Card Component End Here*/
