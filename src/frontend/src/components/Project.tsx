@@ -1,23 +1,69 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Card from "./Card";
-import { projectsData } from "../data/projectsData";
+import { ProjectData, projectsData } from "../data/projectsData";
+import { useNavigate } from "react-router-dom";
+
+interface ViewRecord {
+  project_id: string;
+  view_count: number;
+  project_title?: string;
+}
 
 export default function ProjectSection(): React.JSX.Element {
-  const cards = Object.values(projectsData);
+  const metas: ProjectData[] = Object.values(projectsData);
 
+  const [viewsMap, setViewsMap] = useState<Record<string, number>>({});
+
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/v1/projects/views`)
+      .then((res) => res.json())
+      .then((data: { projects: ViewRecord[] }) => {
+        console.log("GET views response:", data);
+        const m: Record<string, number> = {};
+        data.projects.forEach((r) => {
+          m[r.project_id] = r.view_count;
+        });
+        setViewsMap(m);
+      })
+      .catch((err) => {
+        console.error("無法取得 view counts:", err);
+      });
+  }, []);
+
+  const navigate = useNavigate();
+
+  const handleCardClick = async (id: string, title: string) => {
+    try {
+      await fetch(`${import.meta.env.VITE_API_BASE_URL}/v1/projects/view`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ project_id: id, project_title: title }),
+      });
+      // 可選：直接更新本地 state，避免 reload
+      setViewsMap((prev) => ({
+        ...prev,
+        [id]: (prev[id] ?? 0) + 1,
+      }));
+    } catch (e) {
+      console.error("無法 POST view:", e);
+    } finally {
+      navigate(`/project/${id}`);
+    }
+  };
   return (
     <section id="project" className="project-section">
       <h2 className="project-title">Project</h2>
       <div className="project-grid">
-        {cards.map((c, i) => (
+        {metas.map((meta) => (
           <Card
-            key={i}
-            id={c.id}
-            title={c.title}
-            subtitle={c.subtitle}
-            description={c.description}
-            labels={c.labels}
-            views={c.views}
+            key={meta.id}
+            id={meta.id}
+            title={meta.title}
+            subtitle={meta.subtitle}
+            description={meta.description}
+            labels={meta.labels}
+            views={viewsMap[meta.id] ?? 0}
+            onClick={() => handleCardClick(meta.id, meta.title)}
           />
         ))}
       </div>

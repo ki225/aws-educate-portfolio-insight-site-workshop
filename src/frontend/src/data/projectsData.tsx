@@ -8,7 +8,7 @@ export interface ProjectData {
   features: string[];
   challenges: string[];
   images: string[];
-  views: number;
+  // views: number;
   labels: string[];
   liveUrl?: string;
   githubUrl?: string;
@@ -43,7 +43,7 @@ export const projectsData: Record<string, ProjectData> = {
     ],
     images: ["/images/sorting-hat-1.jpg", "/images/sorting-hat-2.jpg"],
     labels: ["S3", "EC2", "CP"],
-    views: 120,
+    // views: 120,
     liveUrl: "https://sorting-hat.example.com",
     githubUrl: "https://github.com/user/sorting-hat",
   },
@@ -76,7 +76,7 @@ export const projectsData: Record<string, ProjectData> = {
     ],
     images: ["/images/dashboard-1.jpg", "/images/dashboard-2.jpg"],
     labels: ["React", "Node.js", "MongoDB"],
-    views: 150,
+    // views: 150,
     liveUrl: "https://ecommerce-dashboard.example.com",
     githubUrl: "https://github.com/user/ecommerce-dashboard",
   },
@@ -116,7 +116,7 @@ export const projectsData: Record<string, ProjectData> = {
     ],
     images: ["/images/weather-1.jpg", "/images/weather-2.jpg"],
     labels: ["Vue.js", "PWA", "API"],
-    views: 95,
+    // views: 95,
     liveUrl: "https://weather-forecast.example.com",
     githubUrl: "https://github.com/user/weather-forecast",
   },

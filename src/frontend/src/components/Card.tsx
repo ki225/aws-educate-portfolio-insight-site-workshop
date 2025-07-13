@@ -8,6 +8,7 @@ interface CardProps {
   description: string;
   labels: string[];
   views: number;
+  onClick: () => void;
 }
 
 export default function Card({
@@ -17,9 +18,17 @@ export default function Card({
   description,
   labels,
   views = 0, // Default value for views
+  onClick,
 }: CardProps): React.JSX.Element {
   return (
-    <Link to={`/project/${id}`} className="card-link">
+    <Link
+      to={`/project/${id}`}
+      className="card-link"
+      onClick={(e) => {
+        e.preventDefault(); // 阻止默认导航
+        onClick(); // 先执行你的 POST handler
+      }}
+    >
       <div className="card">
         <div className="card-image">
           {/* 這裏放你的圖片 */}
