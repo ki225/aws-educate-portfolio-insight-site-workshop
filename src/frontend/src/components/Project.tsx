@@ -1,33 +1,9 @@
 import React from "react";
 import Card from "./Card";
+import { projectsData } from "../data/projectsData";
 
 export default function ProjectSection(): React.JSX.Element {
-  const cards = [
-    {
-      title: "Sorting Hat Website",
-      subtitle: "0322 CP Workshop",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
-      labels: ["S3", "EC2", "CP"],
-      views: 120,
-    },
-    {
-      title: "Title",
-      subtitle: "Subtitle",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
-      labels: ["Label", "Label"],
-      views: 120,
-    },
-    {
-      title: "Title",
-      subtitle: "Subtitle",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
-      labels: ["Label", "Label"],
-      views: 120,
-    },
-  ];
+  const cards = Object.values(projectsData);
 
   return (
     <section id="project" className="project-section">
@@ -36,7 +12,7 @@ export default function ProjectSection(): React.JSX.Element {
         {cards.map((c, i) => (
           <Card
             key={i}
-            id={String(i)}
+            id={c.id}
             title={c.title}
             subtitle={c.subtitle}
             description={c.description}
