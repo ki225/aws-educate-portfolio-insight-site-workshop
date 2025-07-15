@@ -23,6 +23,7 @@ export default function ProjectSection(): React.JSX.Element {
   }, []);
 
   useEffect(() => {
+    if (!apiBaseUrl) return;
     fetch(`${apiBaseUrl}/v1/projects/views`)
       .then((res) => res.json())
       .then((data: { projects: ViewRecord[] }) => {
@@ -36,7 +37,7 @@ export default function ProjectSection(): React.JSX.Element {
       .catch((err) => {
         console.error("無法取得 view counts:", err);
       });
-  }, []);
+  }, [apiBaseUrl]);
 
   const navigate = useNavigate();
 
