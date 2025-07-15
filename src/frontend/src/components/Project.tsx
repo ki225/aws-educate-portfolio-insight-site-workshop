@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Card from "./Card";
 import { ProjectData, projectsData } from "../data/projectsData";
 import { useNavigate } from "react-router-dom";
+import { loadConfig } from "../lib/action/config";
 
 interface ViewRecord {
   project_id: string;
@@ -13,9 +14,16 @@ export default function ProjectSection(): React.JSX.Element {
   const metas: ProjectData[] = Object.values(projectsData);
 
   const [viewsMap, setViewsMap] = useState<Record<string, number>>({});
+  const [apiBaseUrl, setApiBaseUrl] = useState<string>("");
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_BASE_URL}/v1/projects/views`)
+    loadConfig().then((config) => {
+      setApiBaseUrl(config.API_BASE_URL);
+    });
+  }, []);
+
+  useEffect(() => {
+    fetch(`${apiBaseUrl}/v1/projects/views`)
       .then((res) => res.json())
       .then((data: { projects: ViewRecord[] }) => {
         console.log("GET views response:", data);
@@ -34,7 +42,7 @@ export default function ProjectSection(): React.JSX.Element {
 
   const handleCardClick = async (id: string, title: string) => {
     try {
-      await fetch(`${import.meta.env.VITE_API_BASE_URL}/v1/projects/view`, {
+      await fetch(`${apiBaseUrl}/v1/projects/view`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ project_id: id, project_title: title }),
