@@ -3,6 +3,7 @@ import os
 import logging
 import boto3
 from botocore.exceptions import ClientError
+from decimal import Decimal
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -10,6 +11,11 @@ logger.setLevel(logging.INFO)
 dynamodb = boto3.resource('dynamodb')
 table_name = os.environ.get('PROJECT_VIEWS_TABLE_NAME', 'portfolio-insight-project-views')
 project_views_table = dynamodb.Table(table_name)
+
+def decimal_to_float(obj):
+    if isinstance(obj, Decimal):
+        return float(obj)
+    raise TypeError
 
 def lambda_handler(event, context):
     """
@@ -72,7 +78,7 @@ def get_all_project_views(headers):
         return {
             'statusCode': 200,
             'headers': headers,
-            'body': json.dumps(result, default=str)
+            'body': json.dumps(result, default=decimal_to_float)
         }
     
     except ClientError as e:
@@ -121,7 +127,7 @@ def increment_project_view(event, headers):
             'body': json.dumps({
                 'message': 'View count incremented',
                 'project': updated_item
-            }, default=str)
+            }, default=decimal_to_float)
         }
         
     except ClientError as e:
