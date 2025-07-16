@@ -95,6 +95,7 @@ Resources:
           import logging
           import boto3
           from botocore.exceptions import ClientError
+          from decimal import Decimal
 
           logger = logging.getLogger()
           logger.setLevel(logging.INFO)
@@ -102,6 +103,11 @@ Resources:
           dynamodb = boto3.resource('dynamodb')
           table_name = os.environ.get('PROJECT_VIEWS_TABLE_NAME', 'portfolio-insight-project-views')
           project_views_table = dynamodb.Table(table_name)
+
+          def decimal_to_float(obj):
+              if isinstance(obj, Decimal):
+                  return float(obj)
+              raise TypeError
 
           def lambda_handler(event, context):
               """
@@ -164,7 +170,7 @@ Resources:
                   return {
                       'statusCode': 200,
                       'headers': headers,
-                      'body': json.dumps(result)
+                      'body': json.dumps(result, default=decimal_to_float)
                   }
               
               except ClientError as e:
@@ -213,7 +219,7 @@ Resources:
                       'body': json.dumps({
                           'message': 'View count incremented',
                           'project': updated_item
-                      })
+                      }, default=decimal_to_float)
                   }
                   
               except ClientError as e:
@@ -229,6 +235,7 @@ Resources:
                       'headers': headers,
                       'body': json.dumps({'error': 'Invalid JSON in request body'})
                   }
+
       Tags:
         - Key: Project
           Value: !Ref ProjectName
