@@ -35,6 +35,7 @@
   cursor: pointer;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   color: #f5efe7;
+  text-decoration: none;
 }
 
 .resumeBtn:hover {
@@ -106,6 +107,7 @@
     font-size: 1.1rem;
     padding: 0.6rem 1.2rem;
   }
+
   .heroImage img {
     width: 240px;
     height: 240px;

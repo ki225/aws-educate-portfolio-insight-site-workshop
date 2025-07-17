@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import avatar from "../../assets/avatar.png";
 import { loadConfig, Config } from "../../lib/action/config";
 import styles from "./Hero.module.css";
 
@@ -24,10 +23,12 @@ export default function Hero(): React.JSX.Element {
         <p className={styles.subtitle}>
           based in {config?.location || "Taipei"}
         </p>
-        <button className={styles.resumeBtn}>Resume</button>
+        <a href="/resume.pdf" download className={styles.resumeBtn}>
+          Resume
+        </a>
       </div>
       <div className={styles.heroImage}>
-        <img src={avatar} alt={config?.siteName || "Allen Hsieh"} />
+        <img src="/avatar.png" alt={config?.siteName || "Allen Hsieh"} />
       </div>
     </section>
   );
