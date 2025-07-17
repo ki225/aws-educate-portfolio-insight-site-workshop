@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { HashLink as Link } from "react-router-hash-link";
 import { FaInstagram, FaFacebook, FaYoutube } from "react-icons/fa";
-import { loadConfig, Config } from "../lib/action/config";
+import { loadConfig, Config } from "../../lib/action/config";
+import styles from "./Header.module.css";
 
 export default function Header(): React.JSX.Element {
   const [config, setConfig] = useState<Config | null>(null);
@@ -11,15 +12,15 @@ export default function Header(): React.JSX.Element {
   }, []);
 
   return (
-    <header className="header">
-      <Link smooth to="/" className="header-left">
+    <header className={styles.header}>
+      <Link smooth to="/" className={styles.headerLeft}>
         {config?.siteName || "AWS Ambassador"}
       </Link>
-      <nav className="header-right">
+      <nav className={styles.headerRight}>
         <Link smooth to="/#project">
           Project
         </Link>
-        <div className="social-icons">
+        <div className={styles.socialIcons}>
           <a
             href={config?.socialLinks.instagram || "#"}
             target="_blank"

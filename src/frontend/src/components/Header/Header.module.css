@@ -1,0 +1,73 @@
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem 4rem;
+}
+.headerLeft {
+  font-size: 1.25rem;
+  font-weight: bold;
+  text-decoration: none;
+  color: inherit;
+}
+.headerLeft:hover {
+  color: #3e5879;
+  transform: scale(1.05);
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.headerRight a {
+  font-size: 1.2rem;
+  /* font-weight: bold; */
+  text-decoration: none;
+  color: inherit;
+  position: relative; /* 為偽元素定位 */
+  transition: color 0.3s ease;
+}
+
+.headerRight a::after {
+  content: "";
+  position: absolute;
+  bottom: -2px; /* 調整下劃線位置 */
+  left: 0;
+  width: 0; /* 初始寬度為 0 */
+  height: 2px; /* 下劃線厚度 */
+  background-color: #3e5879;
+  transition: width 0.3s ease; /* 寬度變化的動畫 */
+}
+
+.headerRight a:hover {
+  color: #3e5879;
+  text-decoration: none; /* 移除原本的下劃線 */
+}
+
+.headerRight a:hover::after {
+  width: 100%; /* hover 時寬度變為 100% */
+}
+
+.socialIcons {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.socialIcons a {
+  font-size: 1.2rem;
+  color: inherit;
+  transition: all 0.3s ease;
+}
+
+.socialIcons a:hover {
+  color: #3e5879;
+  transform: scale(1.2);
+}
+
+/* 移除社交媒體 icon 的下劃線效果 */
+.socialIcons a::after {
+  display: none;
+}

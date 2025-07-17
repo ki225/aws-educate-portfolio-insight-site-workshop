@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import styles from "./Card.module.css";
 
 interface CardProps {
   id: string;
@@ -28,27 +29,25 @@ export default function Card({
   };
 
   return (
-    <Link to={`/project/${id}`} className="card-link" onClick={handleClick}>
-      <div className="card">
-        <div className="card-image">
-          {image ? (
-            <img src={image} alt={title} className="card-image-actual" />
-          ) : (
-            <div className="card-image-placeholder"></div>
-          )}
-        </div>
-        <div className="card-body">
+    <Link
+      to={`/project/${id}`}
+      className={styles.cardLink}
+      onClick={handleClick}
+    >
+      <div className={styles.card}>
+        <img src={image} alt={title} className={styles.cardImage} />
+        <div className={styles.cardBody}>
           <div className="card-header-area">
-            <div className="card-body-title">{title}</div>
-            <div className="card-body-sub">{subtitle}</div>
+            <div className={styles.cardBodyTitle}>{title}</div>
+            <div className={styles.cardBodySub}>{subtitle}</div>
           </div>
-          <p className="card-description">{description}</p>
-          <div className="card-labels">
+          <p className={styles.cardDescription}>{description}</p>
+          <div className={styles.cardLabels}>
             {labels.map((lbl, i) => (
               <button
                 key={i}
-                className={`card-label ${
-                  i === labels.length - 1 ? "filled" : "outline"
+                className={`${styles.cardLabel} ${
+                  i === labels.length - 1 ? styles.filled : styles.outline
                 }`}
               >
                 {lbl}
@@ -56,7 +55,7 @@ export default function Card({
             ))}
           </div>
         </div>
-        <div className="card-views">👁️ {views}</div>
+        <div className={styles.cardViews}>👁️ {views}</div>
       </div>
     </Link>
   );
