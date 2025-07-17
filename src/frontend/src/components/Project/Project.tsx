@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import Card from "./Card";
-import { ProjectData, projectsData } from "../data/projectsData";
+import Card from "../Card/Card";
+import { ProjectData, projectsData } from "../../data/projectsData";
 import { useNavigate } from "react-router-dom";
-import { loadConfig } from "../lib/action/config";
+import { loadConfig } from "../../lib/action/config";
+import styles from "./Project.module.css";
 
 interface ViewRecord {
   project_id: string;
@@ -10,7 +11,7 @@ interface ViewRecord {
   project_title?: string;
 }
 
-export default function ProjectSection(): React.JSX.Element {
+export default function Project(): React.JSX.Element {
   const metas: ProjectData[] = Object.values(projectsData);
 
   const [viewsMap, setViewsMap] = useState<Record<string, number>>({});
@@ -60,9 +61,9 @@ export default function ProjectSection(): React.JSX.Element {
     }
   };
   return (
-    <section id="project" className="project-section">
-      <h2 className="project-title">Project</h2>
-      <div className="project-grid">
+    <section id="project" className={styles.projectSection}>
+      <h2 className={styles.projectTitle}>Project</h2>
+      <div className={styles.projectGrid}>
         {metas.map((meta) => (
           <Card
             key={meta.id}
@@ -70,6 +71,7 @@ export default function ProjectSection(): React.JSX.Element {
             title={meta.title}
             subtitle={meta.subtitle}
             description={meta.description}
+            image={meta.image}
             labels={meta.labels}
             views={viewsMap[meta.id] ?? 0}
             onClick={() => handleCardClick(meta.id, meta.title)}

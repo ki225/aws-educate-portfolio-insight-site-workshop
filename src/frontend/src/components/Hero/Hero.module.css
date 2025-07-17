@@ -1,0 +1,144 @@
+/* src/components/Hero/Hero.module.css */
+.hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 4rem;
+  margin: 0 6%;
+  /* outline: 2px dashed red; */
+  min-height: calc(100vh - var(--header-height));
+}
+.heroText .greeting {
+  font-weight: bold;
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+.heroText .title {
+  color: #3e5879;
+  font-weight: bold;
+  font-size: 3.5rem;
+  line-height: 1.1;
+  letter-spacing: 0.5rem;
+  margin-bottom: 1rem;
+}
+.heroText .subtitle {
+  font-weight: bold;
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
+}
+.resumeBtn {
+  font-size: 1.25rem;
+  padding: 0.75rem 1.5rem;
+  background-color: #a6c3e8;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  color: #f5efe7;
+  text-decoration: none;
+}
+
+.resumeBtn:hover {
+  background-color: #8db3e2;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.resumeBtn:active {
+  transform: translateY(-2px) scale(1.03); /* 按下時放大 10% */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+/* 4. Hero 大頭照 */
+.heroImage img {
+  width: 320px;
+  height: 320px;
+  object-fit: cover;
+  border: 8px solid #3e5879;
+  border-radius: 50%;
+}
+
+/*———————————————
+  ≤ 991px：Tablet Landscape
+———————————————*/
+@media (max-width: 991px) {
+  .hero {
+    padding: 0 3rem;
+    margin: 0 4%;
+    min-height: calc(100vh - var(--header-height-md));
+    /* 可視需求維持 full-height 或改 auto */
+  }
+  .heroText .title {
+    font-size: 2.5rem;
+    letter-spacing: 0.4rem;
+  }
+  .heroImage img {
+    width: 240px;
+    height: 240px;
+  }
+  .resumeBtn {
+    font-size: 1.15rem;
+    padding: 0.65rem 1.3rem;
+  }
+}
+
+/*———————————————
+  ≤ 768px：Tablet Portrait / 大手機
+———————————————*/
+@media (max-width: 768px) {
+  .hero {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: center;
+    padding: 2rem 2rem;
+    margin: 0 5%;
+    gap: 2rem;
+    min-height: calc(100vh - var(--header-height-sm));
+  }
+  .heroText .greeting,
+  .heroText .subtitle {
+    font-size: 1rem;
+  }
+  .heroText .title {
+    font-size: 2.5rem;
+    letter-spacing: 0.3rem;
+  }
+  .resumeBtn {
+    font-size: 1.1rem;
+    padding: 0.6rem 1.2rem;
+  }
+
+  .heroImage img {
+    width: 240px;
+    height: 240px;
+  }
+}
+
+/*———————————————
+  ≤ 576px：小手機
+———————————————*/
+@media (max-width: 576px) {
+  .hero {
+    min-height: calc(100vh - var(--header-height-xs));
+    padding: 3rem 0;
+  }
+  .heroText .greeting,
+  .heroText .subtitle {
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+  }
+  .heroText .title {
+    font-size: 2rem;
+    letter-spacing: 0.2rem;
+    margin-bottom: 2rem;
+  }
+  .resumeBtn {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    margin-bottom: 1rem;
+  }
+  .heroImage img {
+    width: 200px;
+    height: 200px;
+  }
+}

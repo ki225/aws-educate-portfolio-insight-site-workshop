@@ -1,6 +1,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import { projectsData } from "../data/projectsData";
+import styles from "./ProjectPage.module.css";
 
 export default function ProjectDetail() {
   const { id } = useParams();
@@ -11,7 +12,7 @@ export default function ProjectDetail() {
   }
 
   return (
-    <div className="project-detail">
+    <div className={styles.projectDetail}>
       <h1>{project.title}</h1>
       <p>{project.subtitle}</p>
 

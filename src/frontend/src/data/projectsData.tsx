@@ -7,16 +7,14 @@ export interface ProjectData {
   technologies: string[];
   features: string[];
   challenges: string[];
-  images: string[];
+  image: string;
   // views: number;
   labels: string[];
-  liveUrl?: string;
-  githubUrl?: string;
 }
 
 export const projectsData: Record<string, ProjectData> = {
-  "sorting-hat-website": {
-    id: "sorting-hat-website",
+  "workshop-cp-1": {
+    id: "workshop-cp-1",
     title: "Sorting Hat Website",
     subtitle: "0322 CP Workshop",
     description:
@@ -41,83 +39,82 @@ export const projectsData: Record<string, ProjectData> = {
       "跨瀏覽器兼容性問題",
       "使用者體驗優化",
     ],
-    images: ["/images/sorting-hat-1.jpg", "/images/sorting-hat-2.jpg"],
+    image: "/images/ws-1.jpg",
     labels: ["S3", "EC2", "CP"],
-    // views: 120,
-    liveUrl: "https://sorting-hat.example.com",
-    githubUrl: "https://github.com/user/sorting-hat",
   },
-  "project-2": {
-    id: "project-2",
-    title: "E-Commerce Dashboard",
-    subtitle: "React & Node.js",
+  "workshop-aif-2": {
+    id: "workshop-aif-2",
+    title: "AIF Workshop｜Amazon Bedrock + AI Agent 實作體驗",
+    subtitle: "AWS Educate 證照陪跑計畫",
     description:
-      "功能完整的電商管理後台系統，提供商品管理、訂單追蹤和銷售數據分析，採用 React + Node.js 全端開發架構。",
+      "以 Amazon Bedrock + AI Agent 打造吉伊卡哇戀愛測驗，結合 LINE Bot 實作與 RAG 概念應用的生成式 AI 教學工作坊。",
     detailDescription: `
-      一個功能完整的電商管理後台系統，提供商品管理、訂單追蹤、銷售數據分析等功能。
-      前端使用 React 配合 Chart.js 製作數據視覺化圖表，後端使用 Node.js 與 Express 建構 RESTful API，
-      資料庫採用 MongoDB 儲存。整個系統具備完整的使用者權限管理、即時數據更新、
-      以及響應式設計，能夠適應不同裝置的螢幕尺寸。
-    `,
-    technologies: ["React", "Node.js", "Express", "MongoDB", "Chart.js", "JWT"],
-    features: [
-      "商品庫存管理",
-      "訂單狀態追蹤",
-      "銷售數據視覺化",
-      "使用者權限管理",
-      "即時通知系統",
-      "匯出報表功能",
-    ],
-    challenges: [
-      "大量數據的效能優化",
-      "即時數據同步機制",
-      "複雜的權限控制邏輯",
-      "圖表數據的準確性驗證",
-    ],
-    images: ["/images/dashboard-1.jpg", "/images/dashboard-2.jpg"],
-    labels: ["React", "Node.js", "MongoDB"],
-    // views: 150,
-    liveUrl: "https://ecommerce-dashboard.example.com",
-    githubUrl: "https://github.com/user/ecommerce-dashboard",
-  },
-  "project-3": {
-    id: "project-3",
-    title: "Weather Forecast App",
-    subtitle: "Mobile-First PWA",
-    description:
-      "採用 Mobile-First 設計的天氣預報 PWA 應用，整合第三方 API 提供即時天氣資訊，支援離線瀏覽和多城市查詢。",
-    detailDescription: `
-      一個採用 Mobile-First 設計理念的天氣預報應用程式，整合第三方天氣 API 提供準確的天氣資訊。
-      應用程式支援 PWA (Progressive Web App) 功能，使用者可以將其安裝到手機桌面，
-      離線時也能瀏覽已快取的天氣資料。介面設計簡潔直觀，支援多城市天氣查詢、
-      七天天氣預報、以及天氣警報通知功能。
+      本次 AIF Workshop 工作坊，學員實作了一個結合 Amazon Bedrock + AI Agent 的吉伊卡哇風格戀愛測驗應用，
+    並透過 LINE Bot 與心理測驗互動設計，深入理解 LLM Agent、RAG 架構與 AWS 雲端服務整合。
+    課程涵蓋生成式 AI、EC2/S3 等 AWS 服務基礎，以及 AI Agent 開發流程，幫助學員累積 AIF 證照所需技能。
+    學員也親手打造屬於自己的 AI 心理測驗，收穫滿滿！
     `,
     technologies: [
-      "Vue.js",
-      "PWA",
-      "Service Worker",
-      "Weather API",
-      "Vuex",
-      "SCSS",
+      "Amazon Bedrock",
+      "LangChain",
+      "RAG",
+      "LINE Messaging API",
+      "AWS EC2",
+      "AWS S3",
     ],
     features: [
-      "即時天氣資訊查詢",
-      "七天天氣預報",
-      "多城市管理",
-      "離線資料瀏覽",
-      "天氣警報推送",
-      "地理位置自動偵測",
+      "Amazon Bedrock + LangChain 整合應用",
+      "建立具互動性的 LLM Agent",
+      "RAG 檔案檢索架構實作",
+      "LINE Bot 心理測驗整合",
+      "AWS EC2/S3 基礎操作與部署",
+      "AIF 證照考點講解與筆記分享",
     ],
     challenges: [
-      "Service Worker 的快取策略",
-      "不同天氣 API 的資料格式整合",
-      "PWA 的跨平台兼容性",
-      "離線狀態的使用者體驗設計",
+      "整合多項 AWS 與 AI 技術的串接流程",
+      "建構可穩定對話的 Agent 架構",
+      "RAG 文件檢索正確性與效能調整",
+      "LINE Bot 互動邏輯與訊息格式設計",
     ],
-    images: ["/images/weather-1.jpg", "/images/weather-2.jpg"],
-    labels: ["Vue.js", "PWA", "API"],
-    // views: 95,
-    liveUrl: "https://weather-forecast.example.com",
-    githubUrl: "https://github.com/user/weather-forecast",
+    image: "/images/ws-2.jpg",
+    labels: ["Amazon Bedrock", "AI Agent", "AWS Educate"],
+  },
+  "workshop-aif-1": {
+    id: "workshop-aif-1",
+    title: "The AI Tour｜用 AI 洞察 Taylor Swift 演唱會商業密碼",
+    subtitle: "AIF 工作坊｜AI + 商業決策",
+    description:
+      "以 Taylor Swift 演唱會為分析案例，透過 AI 技術深入探討市場趨勢與商業洞察，結合 Bedrock Flow、Amplify、全端串接與資料分析實作。",
+    detailDescription: `
+    本次 AIF 工作坊以「The AI Tour」為題，帶領學員以 Taylor Swift 演唱會為商業案例，實際操作 AI 技術應用。
+    在 Tech 組講師 Richie、Claire、Kiki 的引導下，學員從 AWS Amplify 部署開始，
+    串接 Bedrock Flow 並完成前後端整合，最終透過 Chatbot 與 AI 互動，學習如何應用機器學習與數據分析，
+    協助做出更具洞察力的商業決策。整場活動充滿趣味性與實作深度，是一場含金量十足的 AI 工作坊！
+  `,
+    technologies: [
+      "Amazon Bedrock",
+      "AWS Amplify",
+      "AWS S3",
+      "Bedrock Flow",
+      "Chatbot",
+      "Machine Learning",
+      "Frontend-Backend Integration",
+    ],
+    features: [
+      "AI 商業決策案例實作（以 Taylor Swift 為例）",
+      "使用 AWS Amplify 快速部署應用",
+      "整合 Amazon Bedrock Flow 進行對話應用",
+      "實作資料分析與市場趨勢預測",
+      "前後端串接、打造互動式 Chatbot",
+      "增進 AI 工具應用於商業分析的實務能力",
+    ],
+    challenges: [
+      "資料分析與視覺化呈現的準確性與易用性",
+      "Bedrock Flow 模型調整與回應優化",
+      "前後端整合部署與 Debug",
+      "在商業情境下使用 AI 的情境建構與推論",
+    ],
+    image: "/images/ws-3.jpg",
+    labels: ["AI for Business", "Amazon Bedrock", "Amplify"],
   },
 };

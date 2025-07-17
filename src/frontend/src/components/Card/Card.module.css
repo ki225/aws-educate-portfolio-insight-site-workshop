@@ -1,0 +1,215 @@
+.card {
+  background: #ece9f2;
+  border-radius: 1rem;
+  width: 300px;
+  min-height: 450px;
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* header */
+
+.cardLink {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* image placeholder */
+.cardImage {
+  background: #d8d4da;
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.cardImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center; /* 居中顯示 */
+}
+.cardImage-placeholder {
+  width: 60px;
+  height: 60px;
+  background: #c2bec4;
+  border-radius: 0.5rem;
+}
+/* card body */
+.cardBody .cardDescription {
+  margin-bottom: 1rem; /* 或者你想要的距離 */
+}
+
+.cardViews {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 0.5rem;
+  font-size: 0.875rem;
+  color: #555;
+  /* background: rgba(255, 255, 255, 0.8); */
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+}
+
+/* body */
+.cardBody {
+  padding: 1rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 3rem;
+}
+.cardBodyTitle {
+  min-height: 1.6rem; /* 標題最小高度 */
+  font-weight: bold;
+}
+.cardBodySub {
+  font-size: 0.875rem;
+  color: #555;
+  margin-bottom: 0.75rem;
+  min-height: 1.2rem; /* 副標題最小高度 */
+}
+.cardDescription {
+  flex-grow: 1;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+  color: #333;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3; /* 限制顯示 3 行 */
+  line-clamp: 3;
+  overflow: hidden;
+  line-height: 1.4;
+  height: 3.6rem; /* 固定描述區域高度 (1.4 * 0.875rem * 3行) */
+}
+
+/* labels */
+.cardLabels {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+.cardLabel {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  border-radius: 2rem;
+  border: 1px solid #6f52b8;
+  background: transparent;
+  cursor: pointer;
+}
+.cardLabel:hover {
+  background: rgba(111, 82, 184, 0.1); /* Subtle hover effect */
+}
+.cardLabel.filled {
+  background: #6f52b8;
+  color: white;
+}
+.cardLabel.filled:hover {
+  background: rgba(111, 82, 184, 0.8); /* Darker on hover for filled labels */
+}
+/* Card Component End Here*/
+
+/*———————————————
+  ≤ 991px：Tablet Landscape
+———————————————*/
+@media (max-width: 991px) {
+  .projectGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 兩欄等分 */
+    gap: 1.5rem; /* 欄與欄之間間距 */
+    justify-items: center; /* 卡片置中 */
+  }
+
+  /* override 原本 .card 內的 width & height */
+  .projectGrid > * {
+    width: 100%; /* 滿格寬度 */
+    max-width: 300px; /* 不超過設計稿寬度 */
+  }
+  .projectGrid > * .card {
+    /* 如果你把 .card 寫在子層，可用這個 selector 
+       或直接把 height 改成 min-height */
+    min-height: 450px;
+    height: auto;
+  }
+}
+
+/*———————————————
+  ≤ 768px：Tablet Portrait / 大手機
+———————————————*/
+@media (max-width: 768px) {
+  .card {
+    width: calc(100% - 2rem); /* 單欄，左右留 1rem 間距 */
+    margin: 0 auto 1.2rem;
+    min-height: auto;
+  }
+  .cardImage {
+    height: 140px; /* 圖片略微縮小 */
+  }
+  .cardBodyTitle {
+    font-size: 1rem;
+  }
+  .cardBodySub {
+    font-size: 0.8rem;
+  }
+  .cardDescription {
+    /* 多放一行敘述 */
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+    height: auto;
+  }
+  .cardLabels {
+    gap: 0.4rem;
+  }
+  .cardLabel {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+  .cardViews {
+    font-size: 0.8rem;
+    bottom: 0.75rem;
+  }
+}
+
+/*———————————————
+  ≤ 576px：Small Phone
+———————————————*/
+@media (max-width: 576px) {
+  .card {
+    width: 100%; /* 滿版 */
+    margin: 0 auto 1.5rem;
+    min-height: auto;
+  }
+  .cardImage {
+    height: 120px; /* 再縮小 */
+  }
+  .cardBody {
+    padding: 0.75rem; /* 內距縮小 */
+    padding-bottom: 3rem;
+  }
+  .cardBodyTitle {
+    font-size: 0.95rem;
+  }
+  .cardBodySub {
+    font-size: 0.75rem;
+  }
+  .cardDescription {
+    -webkit-line-clamp: 3; /* 限制 3 行 */
+    line-clamp: 3;
+    height: auto;
+  }
+  .cardLabels {
+    gap: 0.3rem;
+  }
+  .cardLabel {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.75rem;
+  }
+  .cardViews {
+    font-size: 0.75rem;
+    bottom: 0.5rem;
+  }
+}

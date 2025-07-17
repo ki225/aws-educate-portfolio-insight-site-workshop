@@ -1,0 +1,82 @@
+/* Project Section Start Here */
+
+.projectSection {
+  background-color: #2d3e60;
+  padding: 4rem 2rem;
+  text-align: center;
+  height: 100vh;
+}
+.projectTitle {
+  font-family: "Anonymous Pro", monospace;
+  font-size: 4rem;
+  color: #e6d8c3;
+  margin-bottom: 3rem;
+}
+
+/* grid */
+.projectGrid {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+/* Project Section End Here */
+/*———————————————
+  ≤ 991px：Tablet Landscape
+———————————————*/
+@media (max-width: 991px) {
+  .projectSection {
+    padding: 3rem 1.5rem;
+    height: auto; /* 取消固定 vh，讓內容自動撐開 */
+    text-align: center; /* 小螢幕改成左對齊，可選 */
+  }
+  .projectTitle {
+    font-size: 3.5rem;
+    margin-bottom: 2.5rem;
+  }
+  .projectGrid {
+    gap: 1.5rem;
+  }
+}
+
+/*———————————————
+  ≤ 768px：Tablet Portrait / 大手機
+———————————————*/
+@media (max-width: 768px) {
+  .projectSection {
+    padding: 2.5rem 1rem;
+  }
+  .projectTitle {
+    font-size: 3rem;
+    margin-bottom: 2rem;
+  }
+  .projectGrid {
+    align-items: center;
+    gap: 1.5rem;
+  }
+  .projectGrid > * {
+    max-width: 360px;
+  }
+}
+
+/*———————————————
+  ≤ 576px：小手機
+———————————————*/
+@media (max-width: 576px) {
+  .projectSection {
+    padding: 2rem 0.75rem;
+  }
+  .projectTitle {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .projectGrid {
+    flex-direction: column; /* 單欄顯示 */
+    align-items: center;
+    gap: 1rem;
+  }
+  .projectGrid > * {
+    width: 100%;
+    max-width: 300px;
+  }
+}

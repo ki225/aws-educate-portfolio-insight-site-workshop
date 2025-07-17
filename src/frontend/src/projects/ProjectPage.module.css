@@ -1,0 +1,131 @@
+/* Project Detail Page Start Here */
+.projectDetail {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 4rem;
+  background-color: #f5efe7;
+  min-height: 100vh;
+}
+
+/* 專案標題區 */
+.projectDetail h1 {
+  font-size: 3rem;
+  color: #213555;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.projectDetail > p {
+  font-size: 1.25rem;
+  color: #3e5879;
+  margin-bottom: 3rem;
+  font-weight: 500;
+}
+
+/* 區塊標題 */
+.projectDetail section {
+  margin-bottom: 3rem;
+  background: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.projectDetail h2 {
+  font-size: 2rem;
+  color: #2d3e60;
+  margin-bottom: 1.5rem;
+  border-bottom: 3px solid #a6c3e8;
+  padding-bottom: 0.5rem;
+  display: inline-block;
+}
+
+/* 專案描述 */
+.projectDetail section p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #213555;
+  white-space: pre-line;
+}
+
+/* 列表樣式 */
+.projectDetail ul {
+  list-style: none;
+  padding: 0;
+}
+
+.projectDetail li {
+  background: #f8f9fa;
+  margin: 0.75rem 0;
+  padding: 1rem 1.5rem;
+  border-radius: 0.5rem;
+  border-left: 4px solid #a6c3e8;
+  font-size: 1rem;
+  color: #213555;
+  transition: all 0.3s ease;
+}
+
+.projectDetail li:hover {
+  background: #e9ecef;
+  transform: translateX(5px);
+}
+
+@media (max-width: 1024px) {
+  .projectDetail h1 {
+    font-size: 2.5rem;
+  }
+
+  .projectDetail > p {
+    font-size: 1.125rem;
+  }
+
+  .projectDetail h2 {
+    font-size: 1.75rem;
+  }
+
+  .projectDetail section p,
+  .projectDetail li {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .projectDetail h1 {
+    font-size: 2rem;
+    text-align: center;
+  }
+
+  .projectDetail > p {
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  .projectDetail h2 {
+    font-size: 1.5rem;
+    text-align: center;
+  }
+
+  .projectDetail section p,
+  .projectDetail li {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .projectDetail h1 {
+    font-size: 1.75rem;
+  }
+
+  .projectDetail > p {
+    font-size: 0.95rem;
+  }
+
+  .projectDetail h2 {
+    font-size: 1.25rem;
+  }
+
+  .projectDetail section p,
+  .projectDetail li {
+    font-size: 0.9rem;
+  }
+}
