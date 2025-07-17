@@ -70,17 +70,62 @@
   transform: translateX(5px);
 }
 
-/* 技術標籤樣式 */
-.tech-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 1rem;
+@media (max-width: 1024px) {
+  .projectDetail h1 {
+    font-size: 2.5rem;
+  }
+
+  .projectDetail > p {
+    font-size: 1.125rem;
+  }
+
+  .projectDetail h2 {
+    font-size: 1.75rem;
+  }
+
+  .projectDetail section p,
+  .projectDetail li {
+    font-size: 1rem;
+  }
 }
 
-.tech-grid li {
-  text-align: center;
-  background: linear-gradient(135deg, #a6c3e8, #3e5879);
-  color: white;
-  font-weight: bold;
-  border-left: none;
+@media (max-width: 768px) {
+  .projectDetail h1 {
+    font-size: 2rem;
+    text-align: center;
+  }
+
+  .projectDetail > p {
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  .projectDetail h2 {
+    font-size: 1.5rem;
+    text-align: center;
+  }
+
+  .projectDetail section p,
+  .projectDetail li {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .projectDetail h1 {
+    font-size: 1.75rem;
+  }
+
+  .projectDetail > p {
+    font-size: 0.95rem;
+  }
+
+  .projectDetail h2 {
+    font-size: 1.25rem;
+  }
+
+  .projectDetail section p,
+  .projectDetail li {
+    font-size: 0.9rem;
+  }
 }

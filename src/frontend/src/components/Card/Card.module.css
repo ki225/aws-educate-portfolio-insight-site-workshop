@@ -2,7 +2,7 @@
   background: #ece9f2;
   border-radius: 1rem;
   width: 300px;
-  height: 450px;
+  min-height: 450px;
   display: flex;
   position: relative;
   flex-direction: column;
@@ -79,8 +79,9 @@
   margin-bottom: 1rem;
   color: #333;
   display: -webkit-box;
-  -webkit-line-clamp: 3; /* 限制顯示 3 行 */
   -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3; /* 限制顯示 3 行 */
+  line-clamp: 3;
   overflow: hidden;
   line-height: 1.4;
   height: 3.6rem; /* 固定描述區域高度 (1.4 * 0.875rem * 3行) */
@@ -111,3 +112,104 @@
   background: rgba(111, 82, 184, 0.8); /* Darker on hover for filled labels */
 }
 /* Card Component End Here*/
+
+/*———————————————
+  ≤ 991px：Tablet Landscape
+———————————————*/
+@media (max-width: 991px) {
+  .projectGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 兩欄等分 */
+    gap: 1.5rem; /* 欄與欄之間間距 */
+    justify-items: center; /* 卡片置中 */
+  }
+
+  /* override 原本 .card 內的 width & height */
+  .projectGrid > * {
+    width: 100%; /* 滿格寬度 */
+    max-width: 300px; /* 不超過設計稿寬度 */
+  }
+  .projectGrid > * .card {
+    /* 如果你把 .card 寫在子層，可用這個 selector 
+       或直接把 height 改成 min-height */
+    min-height: 450px;
+    height: auto;
+  }
+}
+
+/*———————————————
+  ≤ 768px：Tablet Portrait / 大手機
+———————————————*/
+@media (max-width: 768px) {
+  .card {
+    width: calc(100% - 2rem); /* 單欄，左右留 1rem 間距 */
+    margin: 0 auto 1.2rem;
+    min-height: auto;
+  }
+  .cardImage {
+    height: 140px; /* 圖片略微縮小 */
+  }
+  .cardBodyTitle {
+    font-size: 1rem;
+  }
+  .cardBodySub {
+    font-size: 0.8rem;
+  }
+  .cardDescription {
+    /* 多放一行敘述 */
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+    height: auto;
+  }
+  .cardLabels {
+    gap: 0.4rem;
+  }
+  .cardLabel {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+  .cardViews {
+    font-size: 0.8rem;
+    bottom: 0.75rem;
+  }
+}
+
+/*———————————————
+  ≤ 576px：Small Phone
+———————————————*/
+@media (max-width: 576px) {
+  .card {
+    width: 100%; /* 滿版 */
+    margin: 0 auto 1.5rem;
+    min-height: auto;
+  }
+  .cardImage {
+    height: 120px; /* 再縮小 */
+  }
+  .cardBody {
+    padding: 0.75rem; /* 內距縮小 */
+    padding-bottom: 3rem;
+  }
+  .cardBodyTitle {
+    font-size: 0.95rem;
+  }
+  .cardBodySub {
+    font-size: 0.75rem;
+  }
+  .cardDescription {
+    -webkit-line-clamp: 3; /* 限制 3 行 */
+    line-clamp: 3;
+    height: auto;
+  }
+  .cardLabels {
+    gap: 0.3rem;
+  }
+  .cardLabel {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.75rem;
+  }
+  .cardViews {
+    font-size: 0.75rem;
+    bottom: 0.5rem;
+  }
+}

@@ -7,4 +7,9 @@
   --card-bg: #ece9f2;
   --label-bg: #6f52b8;
   --project-bg: #2d3e60;
+
+  --header-height: 5rem;
+  --header-height-md: 4.5rem; /* 平板 */
+  --header-height-sm: 4rem; /* 手機 */
+  --header-height-xs: 7rem; /* 小手機 */
 }
