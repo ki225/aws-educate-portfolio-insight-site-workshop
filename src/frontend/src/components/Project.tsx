@@ -10,7 +10,7 @@ interface ViewRecord {
   project_title?: string;
 }
 
-export default function ProjectSection(): React.JSX.Element {
+export default function Project(): React.JSX.Element {
   const metas: ProjectData[] = Object.values(projectsData);
 
   const [viewsMap, setViewsMap] = useState<Record<string, number>>({});
@@ -70,6 +70,7 @@ export default function ProjectSection(): React.JSX.Element {
             title={meta.title}
             subtitle={meta.subtitle}
             description={meta.description}
+            image={meta.image}
             labels={meta.labels}
             views={viewsMap[meta.id] ?? 0}
             onClick={() => handleCardClick(meta.id, meta.title)}
