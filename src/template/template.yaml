@@ -7,11 +7,51 @@ Parameters:
     Default: portfolio-insight
     Description: Name for the project resources
   
-  DeploymentBucket:
+  S3BucketName:
     Type: String
     Description: S3 bucket name for future assets and reference
 
 Resources:
+  # ============== S3 Resources ==============
+  WebsiteBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    Properties:
+      BucketName: !Ref S3BucketName
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: error.html
+      CorsConfiguration:
+        CorsRules:
+          - AllowedHeaders:
+              - '*'
+            AllowedMethods:
+              - GET
+              - HEAD
+            AllowedOrigins:
+              - '*'
+            MaxAge: 3000
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+
+  BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref WebsiteBucket
+      PolicyDocument:
+        Statement:
+          - Action:
+              - 's3:GetObject'
+            Effect: Allow
+            Resource: !Join ['', ['arn:aws:s3:::', !Ref WebsiteBucket, '/*']]
+            Principal: '*'
+
   # ============== DynamoDB Resources ==============
   PortfolioTable:
     Type: AWS::DynamoDB::Table
@@ -387,13 +427,6 @@ Resources:
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub 'arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${PortfolioAPI}/*/*'
 
-  # ============== S3 Resources ==============
-  WebsiteBucket:
-    Type: AWS::S3::Bucket
-    DeletionPolicy: Retain
-    Properties:
-      BucketName: testforws0709
-
 Outputs:
   PortfolioTableName:
     Description: Name of the main DynamoDB table
@@ -423,10 +456,6 @@ Outputs:
     Description: URL for incrementing a project view
     Value: !Sub 'https://${PortfolioAPI}.execute-api.${AWS::Region}.amazonaws.com/v1/projects/view'
     
-  WebsiteURL:
-    Description: URL for the website hosted on S3
-    Value: !GetAtt WebsiteBucket.WebsiteURL
-
   S3BucketName:
     Description: Name of the S3 bucket
     Value: !Ref WebsiteBucket
