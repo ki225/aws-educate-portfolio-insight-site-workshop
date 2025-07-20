@@ -23,7 +23,8 @@
 - AWS Lambda 用於後端處理
 - Amazon API Gateway 用於 API 端點
 <p align="center">
-<img width="1000" height="600" alt="image" src="https://github.com/user-attachments/assets/284706fe-b50c-45cb-9fd5-e78c336a71d4" />
+<img width="1572" height="950" alt="image" src="https://github.com/user-attachments/assets/063002f5-f622-4315-8b48-7bed3b420ef7" />
+
 </p>
 
 ## 部署步驟
