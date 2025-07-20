@@ -32,25 +32,13 @@ Resources:
               - '*'
             MaxAge: 3000
       PublicAccessBlockConfiguration:
-        BlockPublicAcls: false
-        BlockPublicPolicy: false
-        IgnorePublicAcls: false
-        RestrictPublicBuckets: false
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
       Tags:
         - Key: Project
           Value: !Ref ProjectName
-
-  BucketPolicy:
-    Type: AWS::S3::BucketPolicy
-    Properties:
-      Bucket: !Ref WebsiteBucket
-      PolicyDocument:
-        Statement:
-          - Action:
-              - 's3:GetObject'
-            Effect: Allow
-            Resource: !Join ['', ['arn:aws:s3:::', !Ref WebsiteBucket, '/*']]
-            Principal: '*'
 
   # ============== DynamoDB Resources ==============
   PortfolioTable:
